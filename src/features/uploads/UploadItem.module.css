@@ -1,0 +1,52 @@
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  gap: 0.5rem;
+}
+
+.item:hover {
+  background-color: #f9fafb;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.fileName {
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error {
+  width: 100%;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem;
+  background-color: #fef2f2;
+  border-radius: 4px;
+  color: #dc2626;
+  font-size: 0.875rem;
+}

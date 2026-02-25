@@ -1,0 +1,46 @@
+.dropzone {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dropzone:hover:not(.disabled) {
+  border-color: #3b82f6;
+  background-color: #f0f9ff;
+}
+
+.dragging {
+  border-color: #3b82f6;
+  background-color: #dbeafe;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon {
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.text {
+  margin: 0 0 0.5rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.error {
+  margin: 0.5rem 0 0;
+  color: #dc2626;
+  font-size: 0.875rem;
+}

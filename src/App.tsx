@@ -16,6 +16,7 @@ const queryClient = new QueryClient({
 
 function App() {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId') || '');
+  const [planId, setPlanId] = useState(() => localStorage.getItem('planId') || '');
 
   useEffect(() => {
     if (userId) {
@@ -27,15 +28,28 @@ function App() {
     queryClient.invalidateQueries();
   }, [userId]);
 
+  useEffect(() => {
+    if (planId) {
+      localStorage.setItem('planId', planId);
+    } else {
+      localStorage.removeItem('planId');
+    }
+  }, [planId]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="app">
         <header className="header">
           <h1>Video Upload System</h1>
-          <UserIdInput value={userId} onChange={setUserId} />
+          <UserIdInput
+            userId={userId}
+            onUserIdChange={setUserId}
+            planId={planId}
+            onPlanIdChange={setPlanId}
+          />
         </header>
 
-        {userId ? (
+        {userId && planId ? (
           <main className="main">
             <section className="section">
               <h2>Upload Video</h2>
@@ -49,7 +63,7 @@ function App() {
           </main>
         ) : (
           <div className="auth-prompt">
-            <p>Please enter a User ID to continue</p>
+            <p>Please enter a User ID and Plan ID to continue</p>
           </div>
         )}
       </div>

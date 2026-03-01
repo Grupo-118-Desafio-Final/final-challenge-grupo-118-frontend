@@ -17,9 +17,14 @@ export async function apiClient<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const userId = localStorage.getItem('userId');
+  const planId = localStorage.getItem('planId');
 
   if (!userId) {
     throw new ApiError(401, { message: 'User ID not set' });
+  }
+
+  if (!planId) {
+    throw new ApiError(401, { message: 'Plan ID not set' });
   }
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -27,6 +32,7 @@ export async function apiClient<T>(
     headers: {
       'Content-Type': 'application/json',
       'X-User-Id': userId,
+      'X-Plan-Id': planId,
       ...options.headers,
     },
   });

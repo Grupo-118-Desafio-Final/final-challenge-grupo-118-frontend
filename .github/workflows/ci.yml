@@ -14,6 +14,11 @@ on:
 env:
   NODE_VERSION: '20'  # Node.js version
 
+permissions:
+  pull-requests: write  # Required for PR comments
+  contents: read
+  issues: write  # Optional, for issue comments
+
 jobs:
   pipeline:
     name: Run TypeScript Pipeline

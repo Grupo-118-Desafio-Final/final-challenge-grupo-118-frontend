@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - develop
+      - feature/create-upload-flow
 
 env:
   NODE_VERSION: '20'  # Node.js version

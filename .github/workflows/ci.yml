@@ -12,7 +12,7 @@ on:
       - feature/create-upload-flow
 
 env:
-  NODE_VERSION: '20'  # Node.js version.
+  NODE_VERSION: '20'  # Node.js version
 
 jobs:
   pipeline:

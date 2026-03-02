@@ -1,0 +1,30 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: '20'  # Node.js version
+
+jobs:
+  pipeline:
+    name: Run TypeScript Pipeline
+    uses: Grupo-118-Desafio-Final/final-challenge-grupo-118-template-pipeline/.github/workflows/typescript-ci-file.yml@feature/typescript-pipeline-template
+    with:
+      sonar-project-key: 'final-challenge-grupo-118-frontend'
+      sonar-organization: 'grupo-118-desafio-final'
+      dockerfile-path: './Dockerfile'
+      image-name: 'final-challenge-grupo-118-frontend'
+      default-branch: 'main'
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+      ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}

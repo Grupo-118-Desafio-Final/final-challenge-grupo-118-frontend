@@ -22,7 +22,7 @@ permissions:
 jobs:
   pipeline:
     name: Run TypeScript Pipeline
-    uses: Grupo-118-Desafio-Final/final-challenge-grupo-118-template-pipeline/.github/workflows/typescript-ci-file.yml@feature/typescript-pipeline-template
+    uses: Grupo-118-Desafio-Final/final-challenge-grupo-118-template-pipeline/.github/workflows/typescript-ci-file.yml@main
     with:
       sonar-project-key: 'final-challenge-grupo-118-frontend'
       sonar-organization: 'grupo-118-desafio-final'

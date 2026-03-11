@@ -18,7 +18,6 @@ export interface PartInfo {
 // Response types
 export interface CreateUploadResponse {
   uploadId: string;
-  objectKey: string;
   status: UploadStatus;
 }
 
@@ -41,6 +40,8 @@ export interface UploadResponse {
   errorMessage: string | null;
   createdAt: string;
   completedAt: string | null;
+  zipBlobUrl: string;
+  processingStatus: ProcessingStatus;
 }
 
 export interface PagedResponse<T> {
@@ -52,6 +53,8 @@ export interface PagedResponse<T> {
 }
 
 export type UploadStatus = 'Pending' | 'Uploading' | 'Processing' | 'Completed' | 'Failed';
+
+export type ProcessingStatus = 'NotStarted' | 'Processing' | 'Processed' | 'Failed';
 
 // Allowed video types
 export const ALLOWED_VIDEO_TYPES = [

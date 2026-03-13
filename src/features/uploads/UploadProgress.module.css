@@ -1,6 +1,6 @@
 .container {
   padding: 1rem;
-  background-color: #f9fafb;
+  background-color: var(--color-gray-light);
   border-radius: 8px;
 }
 
@@ -13,7 +13,7 @@
 
 .fileName {
   font-weight: 500;
-  color: #111827;
+  color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -22,28 +22,28 @@
 
 .status {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .progressBar {
   height: 8px;
-  background-color: #e5e7eb;
+  background-color: var(--color-border);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background-color: #3b82f6;
+  background-color: var(--color-blue);
   transition: width 0.3s ease;
 }
 
 .progressFill.error {
-  background-color: #ef4444;
+  background-color: var(--color-red);
 }
 
 .progressFill.complete {
-  background-color: #10b981;
+  background-color: var(--color-green);
 }
 
 .footer {
@@ -56,11 +56,11 @@
 .percent {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text-secondary);
 }
 
 .errorMessage {
   margin: 0.5rem 0 0;
-  color: #dc2626;
+  color: var(--color-red-text);
   font-size: 0.875rem;
 }

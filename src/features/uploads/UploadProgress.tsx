@@ -19,6 +19,7 @@ const statusMessages: Record<UploadState['status'], string> = {
 
 export function UploadProgress({ state, onAbort, onReset }: UploadProgressProps) {
   const isUploading = ['preparing', 'uploading', 'completing'].includes(state.status);
+  const percent = Math.round(state.progress);
 
   return (
     <div className={styles.container}>
@@ -27,7 +28,14 @@ export function UploadProgress({ state, onAbort, onReset }: UploadProgressProps)
         <span className={styles.status}>{statusMessages[state.status]}</span>
       </div>
 
-      <div className={styles.progressBar}>
+      <div
+        className={styles.progressBar}
+        role="progressbar"
+        aria-valuenow={percent}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Upload progress: ${percent}%`}
+      >
         <div
           className={`${styles.progressFill} ${state.status === 'error' ? styles.error : ''} ${state.status === 'complete' ? styles.complete : ''}`}
           style={{ width: `${state.progress}%` }}
@@ -35,7 +43,7 @@ export function UploadProgress({ state, onAbort, onReset }: UploadProgressProps)
       </div>
 
       <div className={styles.footer}>
-        <span className={styles.percent}>{Math.round(state.progress)}%</span>
+        <span className={styles.percent}>{percent}%</span>
 
         {isUploading && (
           <Button variant="danger" onClick={onAbort}>

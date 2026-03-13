@@ -7,14 +7,9 @@
   text-transform: uppercase;
 }
 
-.pending {
-  background-color: var(--color-yellow-light);
-  color: var(--color-yellow-text);
-}
-
-.uploading {
-  background-color: var(--color-blue-light);
-  color: #1e40af;
+.notstarted {
+  background-color: var(--color-gray-bg);
+  color: var(--color-text-muted);
 }
 
 .processing {
@@ -22,7 +17,7 @@
   color: var(--color-indigo-text);
 }
 
-.completed {
+.processed {
   background-color: var(--color-green-light);
   color: var(--color-green-text);
 }

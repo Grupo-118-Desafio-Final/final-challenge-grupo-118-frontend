@@ -1,9 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { UserIdInput } from './features/auth/UserIdInput';
+import { LoginForm } from './features/auth/LoginForm';
+import { RegisterForm } from './features/auth/RegisterForm';
 import { UploadForm } from './features/uploads/UploadForm';
 import { UploadList } from './features/uploads/UploadList';
+import { Button } from './components/Button';
+import { tokenStorage } from './api/token';
+import { setUnauthorizedHandler } from './api/client';
 import './App.css';
+
+const APP_TITLE = 'Video Upload System';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,57 +21,68 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const [userId, setUserId] = useState(() => localStorage.getItem('userId') || '');
-  const [planId, setPlanId] = useState(() => localStorage.getItem('planId') || '');
+  const [token, setToken] = useState(() => tokenStorage.get());
+  const [authView, setAuthView] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
-    if (userId) {
-      localStorage.setItem('userId', userId);
-    } else {
-      localStorage.removeItem('userId');
-    }
-    // Invalidate queries when user changes
+    setUnauthorizedHandler(() => {
+      tokenStorage.remove();
+      setToken('');
+      queryClient.clear();
+    });
+  }, []);
+
+  const handleLoginSuccess = (newToken: string) => {
+    tokenStorage.set(newToken);
+    setToken(newToken);
     queryClient.invalidateQueries();
-  }, [userId]);
+  };
 
-  useEffect(() => {
-    if (planId) {
-      localStorage.setItem('planId', planId);
-    } else {
-      localStorage.removeItem('planId');
-    }
-  }, [planId]);
+  const handleLogout = () => {
+    tokenStorage.remove();
+    setToken('');
+    queryClient.clear();
+  };
+
+  if (!token) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="authPage">
+          <h1 className="authTitle">{APP_TITLE}</h1>
+          {authView === 'login' ? (
+            <LoginForm
+              onLoginSuccess={handleLoginSuccess}
+              onSwitchToRegister={() => setAuthView('register')}
+            />
+          ) : (
+            <RegisterForm onSwitchToLogin={() => setAuthView('login')} />
+          )}
+        </div>
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="app">
         <header className="header">
-          <h1>Video Upload System</h1>
-          <UserIdInput
-            userId={userId}
-            onUserIdChange={setUserId}
-            planId={planId}
-            onPlanIdChange={setPlanId}
-          />
+          <h1>{APP_TITLE}</h1>
+          <Button variant="secondary" onClick={handleLogout}>
+            Sign Out
+          </Button>
         </header>
 
-        {userId && planId ? (
-          <main className="main">
-            <section className="section">
-              <h2>Upload Video</h2>
-              <UploadForm />
-            </section>
+        <main className="main">
+          <section className="section">
+            <h2>Upload Video</h2>
+            <UploadForm />
+          </section>
 
-            <section className="section">
-              <h2>Your Uploads</h2>
-              <UploadList />
-            </section>
-          </main>
-        ) : (
-          <div className="auth-prompt">
-            <p>Please enter a User ID and Plan ID to continue</p>
-          </div>
-        )}
+          <section className="section">
+            <h2>Your Uploads</h2>
+            <UploadList />
+          </section>
+        </main>
       </div>
     </QueryClientProvider>
   );

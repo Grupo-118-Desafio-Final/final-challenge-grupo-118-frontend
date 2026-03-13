@@ -1,3 +1,5 @@
+import { tokenStorage } from './token';
+
 const API_BASE_URL = '/api';
 
 export class ApiError extends Error {
@@ -12,30 +14,43 @@ export class ApiError extends Error {
   }
 }
 
+/** Called globally when any API response returns 401. Set by App on mount. */
+export let onUnauthorized: (() => void) | null = null;
+export function setUnauthorizedHandler(fn: () => void) {
+  onUnauthorized = fn;
+}
+
 export async function apiClient<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const userId = localStorage.getItem('userId');
-  const planId = localStorage.getItem('planId');
+  const token = tokenStorage.get();
 
-  if (!userId) {
-    throw new ApiError(401, { message: 'User ID not set' });
+  if (!token) {
+    onUnauthorized?.();
+    throw new ApiError(401, { message: 'Not authenticated' });
   }
 
-  if (!planId) {
-    throw new ApiError(401, { message: 'Plan ID not set' });
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    ...(options.headers as Record<string, string>),
+  };
+
+  // Only set Content-Type for requests that carry a JSON body
+  if (options.body && typeof options.body === 'string') {
+    headers['Content-Type'] = 'application/json';
   }
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-User-Id': userId,
-      'X-Plan-Id': planId,
-      ...options.headers,
-    },
+    headers,
   });
+
+  if (response.status === 401) {
+    onUnauthorized?.();
+    const error = await response.json().catch(() => ({}));
+    throw new ApiError(401, error);
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));

@@ -4,6 +4,12 @@ import { Button } from '../../components/Button';
 import { register } from '../../api/auth';
 import styles from './AuthForm.module.css';
 
+const PLANS = [
+  { id: 1, name: 'Default', price: 9.99, quality: 'HD', maxDuration: '20s', maxSize: '200 MB', frames: 10 },
+  { id: 2, name: 'Standard', price: 19.99, quality: 'Full HD', maxDuration: '20min', maxSize: '2000 MB', frames: 20 },
+  { id: 3, name: 'Premium', price: 29.99, quality: '4K', maxDuration: '60min', maxSize: '10000 MB', frames: 30 },
+];
+
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
 }
@@ -14,6 +20,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const [email, setEmail] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [password, setPassword] = useState('');
+  const [planId, setPlanId] = useState<number | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -31,6 +38,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         // Parse as local date (appending time) to avoid UTC offset shifting the calendar day
         birthDate: new Date(`${birthDate}T00:00:00`).toISOString(),
         password,
+        planId: planId!,
       });
 
       if (result.error) {
@@ -53,7 +61,9 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         <p className={styles.successMessage}>
           Your account has been created successfully. You can now sign in.
         </p>
-        <Button onClick={onSwitchToLogin}>Go to Sign In</Button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button onClick={onSwitchToLogin}>Go to Sign In</Button>
+        </div>
       </div>
     );
   }
@@ -132,11 +142,30 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
           />
         </div>
 
+        <div className={styles.field}>
+          <label className={styles.label}>Plan</label>
+          <div className={styles.planList}>
+            {PLANS.map((plan) => (
+              <button
+                key={plan.id}
+                type="button"
+                className={`${styles.planCard} ${planId === plan.id ? styles.planCardSelected : ''}`}
+                onClick={() => setPlanId(plan.id)}
+              >
+                <span className={styles.planName}>{plan.name}</span>
+                <span className={styles.planPrice}>R$ {plan.price.toFixed(2)}/mo</span>
+                <span className={styles.planDetail}>{plan.quality} · {plan.frames} frames</span>
+                <span className={styles.planDetail}>{plan.maxDuration} · {plan.maxSize}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {error && <p className={styles.error}>{error}</p>}
 
         <Button
           type="submit"
-          disabled={loading || !name || !lastName || !email || !birthDate || !password}
+          disabled={loading || !name || !lastName || !email || !birthDate || !password || planId === null}
         >
           {loading ? 'Creating account…' : 'Create Account'}
         </Button>

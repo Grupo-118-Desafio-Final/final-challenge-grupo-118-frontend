@@ -6,6 +6,7 @@ export interface RegisterRequest {
   email: string;
   birthDate: string;
   password: string;
+  planId: number;
 }
 
 export interface RegisterResponse {
